@@ -5,6 +5,7 @@
 #define MAX_INPUT 1024
 #include <unistd.h>
 
+/* list of function prototype */
 int prompt(char **env, int is_pipe);
 size_t ak_strl(const char *str);
 int ak_strncmp(const char *s1, const char *s2, size_t z);

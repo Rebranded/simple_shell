@@ -17,7 +17,7 @@ int main(int ac, char **av, char **env)
 	else
 	{
 
-		prompt(env, 1);
+		prompt(env, 1);/* prompt user*/
 		write(STDOUT_FILENO, av[0], ak_strl(av[0]));
 		write(STDOUT_FILENO, ": error\n", 8);
 	}
