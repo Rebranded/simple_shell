@@ -100,7 +100,7 @@ int prompt(char **env, int is_pipe)
 			child_pid = fork();
 			if (child_pid == 0)
 			{
-				if (execve(args[0], args, env) == -1)
+				if (execve(args[0], args, env) != 0)
 				{
 					exit(2);
 					perror("hsh");
