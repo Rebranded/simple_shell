@@ -122,7 +122,8 @@ int prompt(char **env, int is_pipe)
 				if (status != 0)
 				{
 					errno = 2;
-
+					
+					free(str);
 					exit(errno);
 				}
 			}
