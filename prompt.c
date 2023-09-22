@@ -93,7 +93,7 @@ int prompt(char **env, int is_pipe)
 			{
 				break;
 			}
-			exit(2);
+			exit(0);
 			break;
 		}
 		else if (args[0] && ak_strcmp(args[0], "env") == 0)
@@ -119,6 +119,12 @@ int prompt(char **env, int is_pipe)
 			else
 			{
 				wait(&status);
+				if (status != 0)
+				{
+					errno = 2;
+
+					exit(errno);
+				}
 			}
 		}
 	}

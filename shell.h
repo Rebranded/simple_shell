@@ -4,6 +4,7 @@
 #define MAX_COMMAND 30
 #define MAX_INPUT 1024
 #include <unistd.h>
+#include <errno.h>
 
 /* list of function prototype */
 int prompt(char **env, int is_pipe);
