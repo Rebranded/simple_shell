@@ -27,6 +27,7 @@ int prompt(char **env, int is_pipe)
 
 	int is_terminal = isatty(STDIN_FILENO);
 	int status;
+	int exec_status;
 
 	while (1)
 	{
@@ -100,21 +101,31 @@ int prompt(char **env, int is_pipe)
 			child_pid = fork();
 			if (child_pid == 0)
 			{
-				if (execve(args[0], args, env) != 0)
+				exec_status = execve(args[0], args, env);
+				if (exec_status != 0)
 				{
 					exit(2);
-					perror("hsh");
 				}
-				exit(1);
 			}
 			else
 			{
 				wait(&status);
 			}
+			if (execve(args[0], args, env) == -1)
+			{
+				exit(2);
+				perror("hsh");
+			}
+			exit(1);
+		}
+		else
+		{
+			wait(&status);
 		}
 	}
+}
 
-	return (0);
+return (0);
 }
 
 /**
