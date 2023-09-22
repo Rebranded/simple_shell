@@ -7,14 +7,11 @@
 #include <unistd.h>
 
 /**
- * prompt - A function that displays a prompt and takes in arguements
+ * prompt - A function that displays a prompt and takes in arguments
  * @env: Environment variable
- * @is_pipe: Flag indicating weda input is from a pipe (1) or command line (0)
+ * @is_pipe: Flag indicating whether input is from a pipe (1) or command line (0)
  * Return: 0, on success
  */
-
-int prompt(char **env, int is_pipe);
-void perform_env(char **env);
 
 int prompt(char **env, int is_pipe)
 {
@@ -39,12 +36,8 @@ int prompt(char **env, int is_pipe)
 		}
 		else
 		{
-			/*if (is_terminal)*/
-			/*{*/
-			/*write(STDOUT_FILENO, "cisfun$ ", 8);*/
-			/*}*/
 			byte = getline(&str, &size, stdin);
-			if (!is_terminal && byte  == -1)
+			if (!is_terminal && byte == -1)
 			{
 				free(str);
 				break; /* End of pipe input */
@@ -90,7 +83,6 @@ int prompt(char **env, int is_pipe)
 				break;
 			}
 			exit(2);
-			break;
 		}
 		else if (args[0] && ak_strcmp(args[0], "env") == 0)
 		{
@@ -106,26 +98,15 @@ int prompt(char **env, int is_pipe)
 				{
 					exit(2);
 				}
+				exit(1);
 			}
 			else
 			{
 				wait(&status);
 			}
-			if (execve(args[0], args, env) == -1)
-			{
-				exit(2);
-				perror("hsh");
-			}
-			exit(1);
-		}
-		else
-		{
-			wait(&status);
 		}
 	}
-}
-
-return (0);
+	return (0);
 }
 
 /**
@@ -133,7 +114,7 @@ return (0);
  * @env: double pointer to environment
  * This function prints the env variables.
  *
- * Return: 0, on sucess
+ * Return: 0, on success
  */
 void perform_env(char **env)
 {
@@ -143,6 +124,5 @@ void perform_env(char **env)
 	{
 		write(STDOUT_FILENO, env[p], ak_strl(env[p]));
 		write(STDOUT_FILENO, "\n", 1);
-
 	}
 }
