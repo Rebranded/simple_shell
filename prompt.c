@@ -7,11 +7,14 @@
 #include <unistd.h>
 
 /**
- * prompt - A function that displays a prompt and takes in arguments
+ * prompt - A function that displays a prompt and takes in arguements
  * @env: Environment variable
- * @is_pipe: Flag indicating whether input is from a pipe (1) or command line (0)
+ * @is_pipe: Flag indicating weda input is from a pipe (1) or command line (0)
  * Return: 0, on success
  */
+
+int prompt(char **env, int is_pipe);
+void perform_env(char **env);
 
 int prompt(char **env, int is_pipe)
 {
@@ -36,8 +39,12 @@ int prompt(char **env, int is_pipe)
 		}
 		else
 		{
+			/*if (is_terminal)*/
+			/*{*/
+			/*write(STDOUT_FILENO, "cisfun$ ", 8);*/
+			/*}*/
 			byte = getline(&str, &size, stdin);
-			if (!is_terminal && byte == -1)
+			if (!is_terminal && byte  == -1)
 			{
 				free(str);
 				break; /* End of pipe input */
@@ -69,7 +76,11 @@ int prompt(char **env, int is_pipe)
 				args[t] = NULL;
 				break;
 			}
-
+			if (t > 0)
+			{
+				if (args[t] && ak_strcmp(args[t], "exit") == 0)
+					exit(EXIT_FAILURE);
+			}
 			t++;
 			args[t] = strtok(NULL, " \t\r\n");
 		}
@@ -83,6 +94,7 @@ int prompt(char **env, int is_pipe)
 				break;
 			}
 			exit(2);
+			break;
 		}
 		else if (args[0] && ak_strcmp(args[0], "env") == 0)
 		{
@@ -93,12 +105,16 @@ int prompt(char **env, int is_pipe)
 			child_pid = fork();
 			if (child_pid == 0)
 			{
-				exec_status = execve(args[0], args, env);
-				if (exec_status != 0)
 				{
-					exit(2);
+					exec_status = execve(args[0], args, env);
+					if (exec_status != 0)
+						/*if (execve(args[0], args, env) == -1)*/
+					{
+						exit(2);
+						perror("hsh");
+					}
+					exit(1);
 				}
-				exit(1);
 			}
 			else
 			{
@@ -106,16 +122,21 @@ int prompt(char **env, int is_pipe)
 			}
 		}
 	}
+
 	return (0);
 }
 
 /**
- * perform_env - A function that handles environment
- * @env: double pointer to environment
- * This function prints the env variables.
+ * perform_env - A function that handles environment variables.
+ * @env: double pointer to environment variables.
  *
- * Return: 0, on success
+ * This function prints the environment variables to the standard output.
+ *
+ *
+ * Return: None.
+ *
  */
+
 void perform_env(char **env)
 {
 	int p;
@@ -124,5 +145,6 @@ void perform_env(char **env)
 	{
 		write(STDOUT_FILENO, env[p], ak_strl(env[p]));
 		write(STDOUT_FILENO, "\n", 1);
+
 	}
 }
